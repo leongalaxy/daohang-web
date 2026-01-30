@@ -23,8 +23,8 @@
             // 加载我的收藏
             loadCustomTools();
             
-            // 为每个工具卡片添加收藏按钮（排除我的收藏栏里的卡片）
-            $('.url-card').not('#custom-tools-container .url-card').each(function() {
+            // 为每个工具卡片添加收藏按钮
+            $('.url-card').each(function() {
                 var card = $(this).find('.card');
                 var cardUrl = card.attr('href');
                 var cardTitle = card.attr('data-original-title');
@@ -98,6 +98,8 @@
                     
                     // 重新加载我的收藏
                     loadCustomTools();
+                    // 更新所有卡片的收藏状态
+                    updateAllFavoriteButtons();
                 });
             });
             
@@ -130,15 +132,84 @@
                         html += '                </div>';
                         html += '            </div>';
                         html += '        </a>';
-                        html += '        <a href="' + tool.url + '" class="togo text-center text-muted is-views" data-id="689" data-toggle="tooltip" data-placement="right" title="直达" rel="nofollow">';
-                        html += '            <i class="iconfont icon-goto"></i>';
-                        html += '        </a>';
                         html += '    </div>';
                         html += '</div>';
                     });
                 }
                 
                 container.html(html);
+                
+                // 为收藏卡片添加收藏按钮
+                $('#custom-tools-container .url-card').each(function() {
+                    var card = $(this).find('.card');
+                    var cardUrl = card.attr('href');
+                    var cardTitle = card.attr('data-original-title');
+                    var cardName = card.find('.url-info strong').text();
+                    var cardImg = card.find('.url-img img').attr('data-src') || card.find('.url-img img').attr('src') || '';
+                    
+                    // 如果是自定义的文字Logo，则获取其HTML
+                    var cardLogo = '';
+                    if (card.find('.url-img > div').length > 0) {
+                        cardLogo = card.find('.url-img > div').prop('outerHTML');
+                    } else {
+                        cardLogo = card.find('.url-img img').prop('outerHTML');
+                    }
+                    
+                    // 创建收藏按钮
+                    var favoriteBtn = $('<button class="favorite-btn" style="position: absolute; top: 6px; right: 6px; background: transparent; border: none; border-radius: 0; width: auto; height: auto; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; transition: all 0.2s; box-shadow: none;" title="点击取消收藏"><svg width="20" height="20" viewBox="0 0 24 24" fill="#007bff" stroke="#6c757d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></button>');
+                    
+                    // 调整卡片相对定位
+                    $(this).css('position', 'relative');
+                    $(this).find('.url-body').css('position', 'relative');
+                    card.css('position', 'relative');
+                    
+                    // 添加收藏按钮到卡片
+                    card.append(favoriteBtn);
+                    
+                    // 收藏按钮点击事件
+                    favoriteBtn.click(function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        var customTools = JSON.parse(localStorage.getItem('customTools') || '[]');
+                        
+                        // 查找并移除
+                        var index = customTools.findIndex(function(tool) {
+                            return tool.url === cardUrl;
+                        });
+                        
+                        if (index > -1) {
+                            // 取消收藏
+                            customTools.splice(index, 1);
+                            localStorage.setItem('customTools', JSON.stringify(customTools));
+                            loadCustomTools();
+                            // 更新所有卡片的收藏状态
+                            updateAllFavoriteButtons();
+                        }
+                    });
+                });
+            }
+            
+            // 更新所有卡片的收藏状态
+            function updateAllFavoriteButtons() {
+                var customTools = JSON.parse(localStorage.getItem('customTools') || '[]');
+                $('.url-card').each(function() {
+                    var card = $(this).find('.card');
+                    var cardUrl = card.attr('href');
+                    var favoriteBtn = card.find('.favorite-btn');
+                    
+                    if (favoriteBtn.length > 0) {
+                        var isFavorited = customTools.some(function(tool) {
+                            return tool.url === cardUrl;
+                        });
+                        
+                        if (isFavorited) {
+                            favoriteBtn.find('svg').attr('fill', '#007bff');
+                        } else {
+                            favoriteBtn.find('svg').attr('fill', 'none');
+                        }
+                    }
+                });
             }
         });
     </script>
@@ -316,6 +387,11 @@
                                     <i class="fas fa-file-upload icon-fw icon-lg mr-2"></i>
                                     <span>网站提交</span></a>
                             </li>
+                            <li class="sidebar-item">
+                                <a href="about.html">
+                                    <i class="fas fa-info-circle icon-fw icon-lg mr-2"></i>
+                                    <span>关于我们</span></a>
+                            </li>
 
                         </ul>
                     </div>
@@ -356,6 +432,16 @@
 				<a href="./">
                                     <i class="fa fa-home fa-lg mr-2"></i>
                                     <span>首页</span>
+                                </a>
+				<ul class="sub-menu">
+
+				</ul>
+			    </li>
+
+			<li>
+				<a href="about.html">
+                                    <i class="fa fa-info-circle fa-lg mr-2"></i>
+                                    <span>关于我们</span>
                                 </a>
 				<ul class="sub-menu">
 
