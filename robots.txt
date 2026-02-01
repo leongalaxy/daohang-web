@@ -1,9 +1,5 @@
-# ===== Cloudflare Content Signals =====
-# 允许搜索引擎建立索引，但禁止用于AI训练
+# ===== 全站允许抓取 =====
 User-agent: *
-Content-Signal: search=yes,ai-train=no
-
-# ===== 全站默认允许抓取 =====
 Allow: /
 
 # ===== 导航站建议屏蔽的低价值页面 =====
@@ -27,7 +23,6 @@ Disallow: /*&q=
 Disallow: /*&s=
 Disallow: /*?page=
 Disallow: /*?sort=
-Disallow: /*?filter=
 
 # 导航站常见跳转页（不需要收录）
 Disallow: /go/
