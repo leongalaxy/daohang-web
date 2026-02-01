@@ -1,4 +1,20 @@
 User-agent: *
 Allow: /
 
+# 常见后台或敏感路径（如果你网站有这些目录，建议保留）
+Disallow: /admin/
+Disallow: /login/
+Disallow: /register/
+Disallow: /api/
+Disallow: /cgi-bin/
+Disallow: /tmp/
+Disallow: /private/
+Disallow: /config/
+
+# 防止搜索结果页被抓取（如果有站内搜索）
+Disallow: /search
+Disallow: /*?q=
+Disallow: /*&q=
+
+# Sitemap 位置（强烈建议你真的生成这个文件）
 Sitemap: https://navgo.top/sitemap.xml
