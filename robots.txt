@@ -1,7 +1,14 @@
+# ===== Cloudflare Content Signals =====
+# 允许搜索引擎建立索引，但禁止用于AI训练
 User-agent: *
+Content-Signal: search=yes,ai-train=no
+
+# ===== 全站默认允许抓取 =====
 Allow: /
 
-# 后台 & 系统目录（如果存在）
+# ===== 导航站建议屏蔽的低价值页面 =====
+
+# 后台 & 系统路径
 Disallow: /admin/
 Disallow: /login/
 Disallow: /register/
@@ -9,31 +16,47 @@ Disallow: /user/
 Disallow: /api/
 Disallow: /config/
 Disallow: /private/
+Disallow: /cgi-bin/
+Disallow: /tmp/
 
-# 站内搜索页（导航站最容易产生重复内容）
+# 站内搜索 & 参数页（防重复内容）
 Disallow: /search
-Disallow: /*?s=
 Disallow: /*?q=
-Disallow: /*&s=
+Disallow: /*?s=
 Disallow: /*&q=
-
-# 筛选、排序、分页等可能产生大量重复URL的参数
-Disallow: /*?sort=
-Disallow: /*?order=
-Disallow: /*?filter=
+Disallow: /*&s=
 Disallow: /*?page=
+Disallow: /*?sort=
+Disallow: /*?filter=
 
-# 防止抓取标签或临时跳转页（如果有）
-Disallow: /tag/
+# 导航站常见跳转页（不需要收录）
 Disallow: /go/
 Disallow: /out/
 
-# 允许抓取静态资源（有助于SEO理解页面结构）
-Allow: /assets/
-Allow: /static/
-Allow: /images/
-Allow: /*.css$
-Allow: /*.js$
+# ===== 单独屏蔽部分AI爬虫 =====
+User-agent: GPTBot
+Disallow: /
 
-# 网站地图
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+# ===== 网站地图 =====
 Sitemap: https://navgo.top/sitemap.xml
