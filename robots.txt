@@ -1,20 +1,39 @@
 User-agent: *
 Allow: /
 
-# 常见后台或敏感路径（如果你网站有这些目录，建议保留）
+# 后台 & 系统目录（如果存在）
 Disallow: /admin/
 Disallow: /login/
 Disallow: /register/
+Disallow: /user/
 Disallow: /api/
-Disallow: /cgi-bin/
-Disallow: /tmp/
-Disallow: /private/
 Disallow: /config/
+Disallow: /private/
 
-# 防止搜索结果页被抓取（如果有站内搜索）
+# 站内搜索页（导航站最容易产生重复内容）
 Disallow: /search
+Disallow: /*?s=
 Disallow: /*?q=
+Disallow: /*&s=
 Disallow: /*&q=
 
-# Sitemap 位置（强烈建议你真的生成这个文件）
+# 筛选、排序、分页等可能产生大量重复URL的参数
+Disallow: /*?sort=
+Disallow: /*?order=
+Disallow: /*?filter=
+Disallow: /*?page=
+
+# 防止抓取标签或临时跳转页（如果有）
+Disallow: /tag/
+Disallow: /go/
+Disallow: /out/
+
+# 允许抓取静态资源（有助于SEO理解页面结构）
+Allow: /assets/
+Allow: /static/
+Allow: /images/
+Allow: /*.css$
+Allow: /*.js$
+
+# 网站地图
 Sitemap: https://navgo.top/sitemap.xml
